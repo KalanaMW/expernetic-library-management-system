@@ -9,7 +9,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.env
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -358,6 +357,17 @@ paket-files/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# macOS
+.DS_Store
+
+# Frontend build output
+frontend/dist/
 
 # OpenCover UI analysis results
 OpenCover/

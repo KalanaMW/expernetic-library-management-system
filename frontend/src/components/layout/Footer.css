@@ -1,0 +1,110 @@
+.app-footer {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.55);
+  color: var(--color-text);
+  padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-lg);
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-width: 560px;
+}
+
+.footer-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.footer-links a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px) saturate(175%);
+  -webkit-backdrop-filter: blur(14px) saturate(175%);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: 0 6px 18px rgba(136, 74, 57, 0.10);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-links a:hover {
+  color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.38);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(136, 74, 57, 0.16);
+}
+
+.footer-user-info {
+  color: var(--color-text);
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  background: rgba(136, 74, 57, 0.15);
+  backdrop-filter: blur(14px) saturate(175%);
+  -webkit-backdrop-filter: blur(14px) saturate(175%);
+  border: 1px solid rgba(136, 74, 57, 0.25);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.footer-description {
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+.footer-bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid rgba(136, 74, 57, 0.12);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.copyright {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-links {
+    justify-content: flex-start;
+  }
+}

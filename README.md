@@ -16,22 +16,29 @@ Simple book inventory management with full CRUD capabilities. Add books, edit th
 
 **Frontend**
 - React 18 with TypeScript
+- **React Router v6** for seamless navigation
+- **Framer Motion** for smooth, professional animations
 - Vite for build tooling (because life's too short for slow builds)
 - Modern React patterns - hooks, functional components
 - Responsive CSS (mobile-first approach)
 
 **Why These Choices?**
 
-SQLite keeps deployment simple - no separate database server to manage. Entity Framework gives us clean data access without writing raw SQL everywhere. TypeScript catches bugs at compile time instead of runtime. Vite provides instant HMR during development. These are battle-tested tools that just work.
+SQLite keeps deployment simple - no separate database server to manage. Entity Framework gives us clean data access without writing raw SQL everywhere. TypeScript catches bugs at compile time instead of runtime. Vite provides instant HMR during development. Framer Motion brings the UI to life with buttery-smooth animations inspired by modern web design. These are battle-tested tools that just work.
 
 ## What You Can Do
 
-- Create book records (title, author, description)
-- List all books in the system
-- Update book information
-- Delete books you no longer need
-- Input validation on both ends (never trust the client)
-- Proper error messages when things go wrong
+- **User Authentication** - Secure registration and login with JWT
+- **Book Management** - Full CRUD operations on your personal library
+  - Create book records (title, author, description, ISBN, year)
+  - View your collection with smooth animations
+  - Search and filter through books instantly
+  - Update book information with real-time validation
+  - Delete books with satisfying confirmation flows
+- **Smooth Animations** - Page transitions, hover effects, loading states
+- **Input Validation** - Both client and server-side (never trust the client)
+- **Proper Error Handling** - Meaningful messages when things go wrong
+- **Responsive Design** - Works beautifully on any screen size
 
 ## Project Layout
 
@@ -192,7 +199,7 @@ Static files end up in `frontend/dist`. You can serve them with any static file 
 
 ## Context
 
-This project was built as an internship assignment for Expernetic LLC. The goal was demonstrating clean architecture, proper separation of concerns, and competency with modern full-stack development practices. It's intentionally focused on fundamentals rather than bells and whistles.
+This project was built as an internship assignment for Expernetic LLC (rebranded as Libréum LMS). The goal was demonstrating clean architecture, proper separation of concerns, and competency with modern full-stack development practices. It's intentionally focused on fundamentals rather than bells and whistles.
 
 ## License
 
