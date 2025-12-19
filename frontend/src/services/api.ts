@@ -10,7 +10,7 @@ import type {
   PaginatedResponse,
 } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5207/api';
 
 // Create axios instance
 const api = axios.create({
@@ -36,7 +36,12 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // Only redirect on 401 if we're not already on login/register pages
+    // This allows login failures to show error messages instead of redirecting
+    const isAuthPage = window.location.pathname === '/login' || 
+                       window.location.pathname === '/register';
+    
+    if (error.response?.status === 401 && !isAuthPage) {
       // Token expired or invalid
       localStorage.removeItem('token');
       localStorage.removeItem('user');
