@@ -11,6 +11,7 @@ export const LoginPage = () => {
   const { login } = useAuth();
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
   const {
     register,
@@ -67,26 +68,38 @@ export const LoginPage = () => {
           )}
 
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="usernameOrEmail">Username</label>
             <input
-              id="username"
+              id="usernameOrEmail"
               type="text"
-              {...register('username', { required: 'Username is required' })}
-              className={errors.username ? 'error' : ''}
+              autoComplete="off"
+              {...register('usernameOrEmail', { required: 'Username is required' })}
+              className={errors.usernameOrEmail ? 'error' : ''}
             />
-            {errors.username && (
-              <span className="field-error">{errors.username.message}</span>
+            {errors.usernameOrEmail && (
+              <span className="field-error">{errors.usernameOrEmail.message}</span>
             )}
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              {...register('password', { required: 'Password is required' })}
-              className={errors.password ? 'error' : ''}
-            />
+            <div className="password-input-wrapper">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="new-password"
+                {...register('password', { required: 'Password is required' })}
+                className={errors.password ? 'error' : ''}
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? '👁️' : '👁️‍🗨️'}
+              </button>
+            </div>
             {errors.password && (
               <span className="field-error">{errors.password.message}</span>
             )}

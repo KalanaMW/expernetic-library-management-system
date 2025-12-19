@@ -41,14 +41,15 @@ public class BooksController : ControllerBase
             query = query.Where(b => b.UserId == userId);
         }
 
-        // Search filter
+        // Search filter (case-insensitive)
         if (!string.IsNullOrWhiteSpace(search))
         {
+            var searchLower = search.ToLower();
             query = query.Where(b => 
-                b.Title.Contains(search) || 
-                b.Author.Contains(search) ||
-                (b.Description != null && b.Description.Contains(search)) ||
-                (b.ISBN != null && b.ISBN.Contains(search)));
+                b.Title.ToLower().Contains(searchLower) || 
+                b.Author.ToLower().Contains(searchLower) ||
+                (b.Description != null && b.Description.ToLower().Contains(searchLower)) ||
+                (b.ISBN != null && b.ISBN.ToLower().Contains(searchLower)));
         }
 
         // Get total count

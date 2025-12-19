@@ -131,6 +131,50 @@ public class AuthController : ControllerBase
         return Ok(MapToUserDto(user));
     }
 
+    /// <summary>
+    /// Update current user profile (requires authentication)
+    /// </summary>
+    [HttpPut("me")]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    public async Task<ActionResult<UserDto>> UpdateProfile(UpdateUserDto dto)
+    {
+        var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
+        
+        var user = await _context.Users.FindAsync(userId);
+        
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found" });
+        }
+
+        // Check if email is being changed and if it's already taken
+        if (!string.IsNullOrWhiteSpace(dto.Email) && dto.Email != user.Email)
+        {
+            if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
+            {
+                return BadRequest(new { message = "Email already in use" });
+            }
+            user.Email = dto.Email;
+        }
+
+        // Update other fields if provided
+        if (dto.FirstName != null)
+        {
+            user.FirstName = dto.FirstName;
+        }
+
+        if (dto.LastName != null)
+        {
+            user.LastName = dto.LastName;
+        }
+
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("User profile updated: {Username}", user.Username);
+
+        return Ok(MapToUserDto(user));
+    }
+
     private static UserDto MapToUserDto(User user)
     {
         return new UserDto

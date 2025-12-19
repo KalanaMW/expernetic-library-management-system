@@ -99,6 +99,7 @@ export const RegisterPage = () => {
             <input
               id="username"
               type="text"
+              autoComplete="off"
               {...register('username', { 
                 required: 'Username is required',
                 minLength: { value: 3, message: 'Username must be at least 3 characters' }
@@ -134,6 +135,7 @@ export const RegisterPage = () => {
             <input
               id="password"
               type="password"
+              autoComplete="new-password"
               {...register('password', { 
                 required: 'Password is required',
                 minLength: { value: 6, message: 'Password must be at least 6 characters' }
@@ -150,6 +152,7 @@ export const RegisterPage = () => {
             <input
               id="confirmPassword"
               type="password"
+              autoComplete="new-password"
               {...register('confirmPassword', { 
                 required: 'Please confirm your password',
                 validate: value => value === password || 'Passwords do not match'

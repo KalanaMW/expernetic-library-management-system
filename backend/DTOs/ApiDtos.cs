@@ -52,6 +52,19 @@ public class UserDto
     public DateTime CreatedAt { get; set; }
 }
 
+public class UpdateUserDto
+{
+    [EmailAddress]
+    [StringLength(100)]
+    public string? Email { get; set; }
+
+    [StringLength(50)]
+    public string? FirstName { get; set; }
+
+    [StringLength(50)]
+    public string? LastName { get; set; }
+}
+
 // ========== Book DTOs ==========
 
 public class CreateBookDto

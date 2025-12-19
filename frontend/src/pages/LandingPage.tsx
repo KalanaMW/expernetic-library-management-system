@@ -1,28 +1,93 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
+import { useRef, useEffect } from 'react';
 import './LandingPage.css';
 
 export const LandingPage = () => {
   const { isAuthenticated } = useAuth();
+  const featuresGridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const gridElement = featuresGridRef.current;
+    if (!gridElement) return;
+
+    let animationFrameId: number;
+    let isPaused = false;
+    let isResetting = false;
+    const scrollSpeed = 0.5;
+
+    const continuousScroll = () => {
+      if (!isPaused && !isResetting && gridElement) {
+        gridElement.scrollLeft += scrollSpeed;
+        
+        const maxScroll = gridElement.scrollWidth - gridElement.clientWidth;
+        
+        if (gridElement.scrollLeft >= maxScroll - 5) {
+          // Pause auto-scroll and smoothly reset
+          isResetting = true;
+          gridElement.scrollTo({ left: 0, behavior: 'smooth' });
+          
+          // Resume after smooth scroll completes (approx 800ms)
+          setTimeout(() => {
+            isResetting = false;
+          }, 1000);
+        }
+      }
+      
+      animationFrameId = requestAnimationFrame(continuousScroll);
+    };
+
+    const handleMouseEnter = () => { isPaused = true; };
+    const handleMouseLeave = () => { isPaused = false; };
+    const handleTouchStart = () => { isPaused = true; };
+    const handleTouchEnd = () => { 
+      setTimeout(() => { isPaused = false; }, 1000);
+    };
+
+    gridElement.addEventListener('mouseenter', handleMouseEnter);
+    gridElement.addEventListener('mouseleave', handleMouseLeave);
+    gridElement.addEventListener('touchstart', handleTouchStart);
+    gridElement.addEventListener('touchend', handleTouchEnd);
+
+    continuousScroll();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      gridElement.removeEventListener('mouseenter', handleMouseEnter);
+      gridElement.removeEventListener('mouseleave', handleMouseLeave);
+      gridElement.removeEventListener('touchstart', handleTouchStart);
+      gridElement.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
 
   return (
     <div className="landing-page">
       {/* Hero Section */}
-      <motion.section
-        className="hero"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="hero-content">
+      <section className="hero">
+        <motion.div 
+          className="hero-content"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            Your Personal Library,
-            <span className="gradient-text"> Beautifully Organized</span>
+          <motion.p
+            className="hero-subtitle"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            Welcome to ...
+          </motion.p>
+
+            | Libréum
+            < br/>
+            <span className="gradient-text">Library Management System.</span>
           </motion.h1>
           
           <motion.p
@@ -31,8 +96,7 @@ export const LandingPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            Collect, organize, and rediscover your favorite books in a warm, 
-            minimalist space designed for book lovers.
+            “Add books, curate your collection, refine details effortlessly, and manage your entire library experience under one roof.”
           </motion.p>
 
           <motion.div
@@ -43,12 +107,12 @@ export const LandingPage = () => {
           >
             {isAuthenticated ? (
               <Link to="/dashboard" className="btn-primary btn-large">
-                Go to My Library
+                Open Dashboard  ☞
               </Link>
             ) : (
               <>
                 <Link to="/register" className="btn-primary btn-large">
-                  Start Your Collection
+                  Register
                 </Link>
                 <Link to="/login" className="btn-secondary btn-large">
                   Sign In
@@ -56,22 +120,9 @@ export const LandingPage = () => {
               </>
             )}
           </motion.div>
-        </div>
-
-        <motion.div
-          className="hero-image"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3, duration: 1 }}
-        >
-          <div className="book-stack">
-            <div className="book book-1">📕</div>
-            <div className="book book-2">📗</div>
-            <div className="book book-3">📘</div>
-            <div className="book book-4">📙</div>
-          </div>
         </motion.div>
-      </motion.section>
+
+      </section>
 
       {/* Features Section */}
       <section className="features">
@@ -81,10 +132,10 @@ export const LandingPage = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          Everything You Need
+          What You Can Do ? <br/> ♞
         </motion.h2>
 
-        <div className="features-grid">
+        <div className="features-grid" ref={featuresGridRef}>
           <motion.div
             className="feature-card"
             initial={{ opacity: 0, y: 20 }}
@@ -92,9 +143,8 @@ export const LandingPage = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.6 }}
           >
-            <div className="feature-icon">📚</div>
-            <h3>Organize Your Collection</h3>
-            <p>Add books with details like author, ISBN, publication year, and cover images. Keep everything in one beautiful place.</p>
+            <h3>⌘ Create</h3>
+            <p>☞ Add a new book record with title, author, and description.</p>
           </motion.div>
 
           <motion.div
@@ -104,9 +154,8 @@ export const LandingPage = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            <div className="feature-icon">🔍</div>
-            <h3>Quick Search</h3>
-            <p>Find any book instantly with our powerful search. Filter by title, author, or any detail you've added.</p>
+            <h3>⌘ View</h3>
+            <p>☞ Browse the list of existing book records.</p>
           </motion.div>
 
           <motion.div
@@ -116,9 +165,8 @@ export const LandingPage = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            <div className="feature-icon">✨</div>
-            <h3>Beautiful Interface</h3>
-            <p>A warm, minimal design inspired by cozy coffee shops. Easy on the eyes, delightful to use.</p>
+            <h3>⌘ Update</h3>
+            <p>☞ Edit and update the details of an existing book record.</p>
           </motion.div>
 
           <motion.div
@@ -128,9 +176,52 @@ export const LandingPage = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <div className="feature-icon">🔒</div>
-            <h3>Secure & Private</h3>
-            <p>Your collection is yours alone. Industry-standard security keeps your library safe and private.</p>
+            <h3>⌘ Delete</h3>
+            <p>☞ Remove book records that are no longer required.</p>
+          </motion.div>
+
+          <motion.div
+            className="feature-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+          >
+            <h3>⌘ Search</h3>
+            <p>☞ Find books quickly by title, author, or description.</p>
+          </motion.div>
+
+          <motion.div
+            className="feature-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+          >
+            <h3>⌘ Sort</h3>
+            <p>☞ Organize your collection by different criteria.</p>
+          </motion.div>
+
+          <motion.div
+            className="feature-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.7, duration: 0.6 }}
+          >
+            <h3>⌘ Filter</h3>
+            <p>☞ View books matching specific requirements.</p>
+          </motion.div>
+
+          <motion.div
+            className="feature-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+          >
+            <h3>⌘ Manage</h3>
+            <p>☞ Keep track of your entire book collection easily.</p>
           </motion.div>
         </div>
       </section>
@@ -143,12 +234,22 @@ export const LandingPage = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        <h2>Start Building Your Library Today</h2>
-        <p>Join book lovers who've already organized their collections</p>
-        {!isAuthenticated && (
-          <Link to="/register" className="btn-primary btn-large">
-            Create Free Account
-          </Link>
+        {isAuthenticated ? (
+          <>
+            <h2>Your Library Awaits</h2>
+            <p>Continue managing your book collection and discover new additions.</p>
+            <Link to="/dashboard" className="btn-primary btn-large">
+              Go to Dashboard
+            </Link>
+          </>
+        ) : (
+          <>
+            <h2>Get Started</h2>
+            <p>Register or sign in to manage book records.</p>
+            <Link to="/register" className="btn-primary btn-large">
+              Register
+            </Link>
+          </>
         )}
       </motion.section>
     </div>

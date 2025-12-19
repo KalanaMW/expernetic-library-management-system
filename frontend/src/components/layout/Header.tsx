@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
+import siteLogo from '../../assets/Site-logo.png';
 import './Header.css';
 
 export const Header = () => {
@@ -15,15 +16,18 @@ export const Header = () => {
     >
       <div className="header-container">
         <Link to="/" className="logo">
-          <span className="logo-icon">📚</span>
-          <span className="logo-text">Library</span>
+          <img className="logo-icon" src={siteLogo} alt="Libréum LMS" />
+          <span className="logo-text">Libréum LMS</span>
         </Link>
 
         <nav className="nav-links">
           {isAuthenticated ? (
             <>
               <Link to="/dashboard" className="nav-link">
-                My Books
+                Books
+              </Link>
+              <Link to="/profile" className="nav-link">
+                Profile
               </Link>
               <div className="user-menu">
                 <span className="user-name">

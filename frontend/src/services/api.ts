@@ -49,17 +49,17 @@ api.interceptors.response.use(
 // Auth API
 export const authApi = {
   login: async (credentials: LoginRequest): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>('/api/auth/login', credentials);
+    const { data } = await api.post<AuthResponse>('/auth/login', credentials);
     return data;
   },
 
   register: async (userData: RegisterRequest): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>('/api/auth/register', userData);
+    const { data } = await api.post<AuthResponse>('/auth/register', userData);
     return data;
   },
 
   getCurrentUser: async (): Promise<User> => {
-    const { data } = await api.get<User>('/api/auth/me');
+    const { data } = await api.get<User>('/auth/me');
     return data;
   },
 };
@@ -71,27 +71,27 @@ export const booksApi = {
     pageSize?: number;
     search?: string;
   }): Promise<PaginatedResponse<Book>> => {
-    const { data } = await api.get<PaginatedResponse<Book>>('/api/books', { params });
+    const { data } = await api.get<PaginatedResponse<Book>>('/books', { params });
     return data;
   },
 
   getBook: async (id: number): Promise<Book> => {
-    const { data } = await api.get<Book>(`/api/books/${id}`);
+    const { data } = await api.get<Book>(`/books/${id}`);
     return data;
   },
 
   createBook: async (book: CreateBookRequest): Promise<Book> => {
-    const { data } = await api.post<Book>('/api/books', book);
+    const { data } = await api.post<Book>('/books', book);
     return data;
   },
 
   updateBook: async (id: number, book: UpdateBookRequest): Promise<Book> => {
-    const { data } = await api.put<Book>(`/api/books/${id}`, book);
+    const { data } = await api.put<Book>(`/books/${id}`, book);
     return data;
   },
 
   deleteBook: async (id: number): Promise<void> => {
-    await api.delete(`/api/books/${id}`);
+    await api.delete(`/books/${id}`);
   },
 };
 

@@ -199,7 +199,7 @@ Static files end up in `frontend/dist`. You can serve them with any static file 
 
 ## Context
 
-This project was built as an internship assignment for Expernetic LLC. The goal was demonstrating clean architecture, proper separation of concerns, and competency with modern full-stack development practices. It's intentionally focused on fundamentals rather than bells and whistles.
+This project was built as an internship assignment for Expernetic LLC (rebranded as Libréum LMS). The goal was demonstrating clean architecture, proper separation of concerns, and competency with modern full-stack development practices. It's intentionally focused on fundamentals rather than bells and whistles.
 
 ## License
 

@@ -113,7 +113,7 @@ export const BookModal = ({ book, onClose, onSuccess }: BookModalProps) => {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="isbn">ISBN</label>
+              <label htmlFor="isbn">ISBN <span className="field-hint">(Optional)</span></label>
               <input
                 id="isbn"
                 type="text"
