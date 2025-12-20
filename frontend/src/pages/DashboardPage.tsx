@@ -18,7 +18,10 @@ export const DashboardPage = () => {
   const fetchBooks = async () => {
     try {
       setIsLoading(true);
-      const response = await booksApi.getBooks({ search: searchQuery });
+      const response = await booksApi.getBooks({ 
+        search: searchQuery,
+        myBooksOnly: true 
+      });
       setBooks(response.data);
     } catch (error) {
       console.error('Failed to fetch books:', error);

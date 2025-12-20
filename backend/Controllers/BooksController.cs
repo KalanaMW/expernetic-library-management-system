@@ -151,7 +151,11 @@ public class BooksController : ControllerBase
         // Check ownership
         if (book.UserId != userId)
         {
-            return Forbid(); // 403 Forbidden
+            _logger.LogWarning("User {UserId} attempted to update book {BookId} owned by {OwnerId}", 
+                userId, id, book.UserId);
+            return StatusCode(403, new { 
+                message = $"You don't have permission to edit this book. Your user ID: {userId}, Book owner ID: {book.UserId}. Please log out and log back in, or contact support if this persists."
+            });
         }
 
         // Check for duplicate ISBN if changed
@@ -212,7 +216,16 @@ public class BooksController : ControllerBase
 
     private int GetCurrentUserId()
     {
-        return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        _logger.LogDebug("Getting current user ID from claim: {Claim}", userIdClaim);
+        
+        if (string.IsNullOrEmpty(userIdClaim) || userIdClaim == "0")
+        {
+            _logger.LogWarning("Invalid or missing user ID claim");
+            return 0;
+        }
+        
+        return int.Parse(userIdClaim);
     }
 
     private static BookDto MapToBookDto(Book book)

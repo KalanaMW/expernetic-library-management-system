@@ -50,8 +50,8 @@ export interface CreateBookRequest {
 }
 
 export interface UpdateBookRequest {
-  title?: string;
-  author?: string;
+  title: string;
+  author: string;
   description?: string;
   isbn?: string;
   publishedYear?: number;
