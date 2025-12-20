@@ -75,6 +75,7 @@ export const booksApi = {
     page?: number;
     pageSize?: number;
     search?: string;
+    myBooksOnly?: boolean;
   }): Promise<PaginatedResponse<Book>> => {
     const { data } = await api.get<PaginatedResponse<Book>>('/books', { params });
     return data;

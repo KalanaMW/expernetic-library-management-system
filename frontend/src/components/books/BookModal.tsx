@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { booksApi } from '../../services/api';
-import type { Book, CreateBookRequest } from '../../types';
+import type { Book, CreateBookRequest, UpdateBookRequest } from '../../types';
 import './BookModal.css';
 
 interface BookModalProps {
@@ -35,15 +35,54 @@ export const BookModal = ({ book, onClose, onSuccess }: BookModalProps) => {
       setIsSubmitting(true);
       setError('');
 
+      console.log('Form data before processing:', data);
+
       if (book) {
-        await booksApi.updateBook(book.id, data);
+        // For updates, handle NaN and empty string values properly
+        const updateData: UpdateBookRequest = {
+          title: data.title?.trim() || '',
+          author: data.author?.trim() || '',
+          description: data.description?.trim() || undefined,
+          isbn: data.isbn?.trim() || undefined,
+          publishedYear: data.publishedYear && !isNaN(data.publishedYear) ? data.publishedYear : undefined,
+          imageUrl: data.imageUrl?.trim() || undefined,
+        };
+        console.log('Updating book:', book.id, updateData);
+        const response = await booksApi.updateBook(book.id, updateData);
+        console.log('Update response:', response);
       } else {
-        await booksApi.createBook(data);
+        // For creates, handle NaN values too
+        const createData: CreateBookRequest = {
+          title: data.title?.trim() || '',
+          author: data.author?.trim() || '',
+          description: data.description?.trim() || undefined,
+          isbn: data.isbn?.trim() || undefined,
+          publishedYear: data.publishedYear && !isNaN(data.publishedYear) ? data.publishedYear : undefined,
+          imageUrl: data.imageUrl?.trim() || undefined,
+        };
+        console.log('Creating book:', createData);
+        const response = await booksApi.createBook(createData);
+        console.log('Create response:', response);
       }
 
       onSuccess();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to save book');
+      console.error('Book save error:', err);
+      console.error('Error response:', err.response);
+      
+      let errorMessage = 'Failed to save book';
+      
+      if (err.response?.status === 403) {
+        errorMessage = err.response?.data?.message || "You don't have permission to edit this book. Please try logging out and logging back in.";
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.response?.data?.errors) {
+        errorMessage = JSON.stringify(err.response.data.errors);
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
